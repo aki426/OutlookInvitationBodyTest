@@ -13,7 +13,7 @@ using ConsoleApp1.AppointmentItem.Tests;
 namespace ConsoleApp1.Utility.Tests
 {
 	[TestClass()]
-	public class IndexedLineBufferTests
+	public class IndexedStringBuilderTests
 	{
 		private static Outlook.Application application;
 
@@ -29,7 +29,7 @@ namespace ConsoleApp1.Utility.Tests
 		{
 			List<(int index, char c)> expected = new List<(int index, char c)>();
 
-			IndexedLineBuffer buf = new IndexedLineBuffer();
+			IndexedStringBuilder buf = new IndexedStringBuilder();
 			(int start, int end) sec;
 			_ = buf.AppendLine();
 			_ = buf.AppendParagraph();

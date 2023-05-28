@@ -266,7 +266,7 @@ namespace ConsoleApp1.AppointmentItem.Tests
 
 			// 半角スペース'\u0020'から'\u00a0'
 			//PrintChars(str.Replace(" ", " "));
-			PrintChars(IndexedLineBuffer.ConvertSpToNbsp(str));
+			PrintChars(IndexedStringBuilder.ConvertSpToNbsp(str));
 		}
 	}
 }

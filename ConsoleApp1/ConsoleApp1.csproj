@@ -46,7 +46,7 @@
     <Compile Include="AppointmentItem\AppointmentItemController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility\IndexedLineBuffer.cs" />
+    <Compile Include="Utility\IndexedStringBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

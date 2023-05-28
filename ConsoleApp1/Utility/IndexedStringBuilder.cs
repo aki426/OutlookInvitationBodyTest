@@ -1,32 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace ConsoleApp1.Utility
 {
-
 	/// <summary>
 	/// AppointmentItem.Body経由でWord.Document.Content.Text化される文字列について、
 	/// 追加した文字列の先頭からのインデクスを取得することができるStringBuilderのラッパークラス。
 	/// 通常のStringからWord.Document.Content.Textへの変換規則については各関数を参照。
 	/// </summary>
-	public class IndexedLineBuffer
+	public class IndexedStringBuilder
 	{
+		//////////////////////////////// メンバー変数 ////////////////////////////////
+
 		/// <summary>
-		/// 文字列のバッファ。
+		/// 文章全体の文字列バッファ。
 		/// </summary>
 		private readonly StringBuilder _sentenceBuilder;
 		/// <summary>
-		/// 文字列のバッファ。
+		/// 現在行の文字列バッファ。
 		/// </summary>
 		private readonly StringBuilder _lineBuilder;
 		/// <summary>
-		/// 現在IndexedLineBufferが蓄えている文字列のインデクス値。
-		/// 改行はStringBuilder内の改行コードの数ではなく、newLineSizeを元に計算される。
+		/// 現在IndexedStringBuilderが蓄えている文字列のWord.Document.Content.Text化した場合の終端インデクス値。
+		/// 改行やスペースがStringBuilder内の数ではなく、Word.Document.Content.Textでのそれとしてカウントされていることに注意。
 		/// </summary>
 		private int _currentIndex;
+
+		//////////////////////////////// Static関数 ////////////////////////////////
 
 		/// <summary>
 		/// SpaceをNbspへ変換する関数。
@@ -70,7 +69,7 @@ namespace ConsoleApp1.Utility
 		{
 			return str.TrimEnd(SpaceCharArray).Length == 0;
 		}
-
+		
 		/// <summary>
 		/// ある1行分の文字列として見た場合、どのような文字列で構成された行として分類されるかを表すEnum。
 		/// </summary>
@@ -119,21 +118,20 @@ namespace ConsoleApp1.Utility
 			}
 		}
 
+		//////////////////////////////// コンストラクタ ////////////////////////////////
+		
 		/// <summary>
 		/// コンストラクタ。改行のインデクスサイズ＝何文字で表現されるべきかを引数として与える。
 		/// </summary>
 		/// <param name="newLineSize"></param>
-		public IndexedLineBuffer()
+		public IndexedStringBuilder()
 		{
 			this._sentenceBuilder = new StringBuilder();
 			this._lineBuilder = new StringBuilder();
 			this._currentIndex = 0;
 		}
 
-		/// <summary>
-		/// 現在の文字列表現の末尾Index。
-		/// </summary>
-		public int CurrentIndex { get => _currentIndex; }
+		//////////////////////////////// メンバー関数 ////////////////////////////////
 
 		/// <summary>
 		/// 改行せずに文字列を詰め込む。
@@ -207,12 +205,12 @@ namespace ConsoleApp1.Utility
 			switch (GetLineType(line))
 			{
 				case LineType.Empty:
-					// 詰め込むべきものが何も無い場合、スペース1つを挿入して改行する。
+					// NOTE: 詰め込むべきものが何も無い場合、スペース1つを挿入して改行する。
 					_sentenceBuilder.Append(" ");
 					_currentIndex += 1;
 					break;
 				case LineType.OnlySpaces:
-					// NOTE: スペースだけで改行する場合、1文字かそれ以外かで挙動が変わる。
+					// NOTE: スペースだけで改行する場合、1文字か2文字以上かで挙動が変わる。
 					if (CountEndSpace(line) == 1)
 					{
 						_sentenceBuilder.Append(line);
@@ -251,7 +249,6 @@ namespace ConsoleApp1.Utility
 
 			// Indexは0始まりなのでendは1Index分引く必要がある。
 			return (start, end - 1);
-
 		}
 
 		/// <summary>
